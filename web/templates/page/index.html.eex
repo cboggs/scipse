@@ -1,8 +1,9 @@
 <div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}", name: "Phoenix!" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
+  <h2><%= gettext "Welcome to Science in Plain Simple English!" %></h2>
+  <p class="lead">A resource for making sense of scientific documents.</p>
 </div>
 
+<!--
 <div class="row marketing">
   <div class="col-lg-6">
     <h4>Resources</h4>
@@ -34,3 +35,4 @@
     </ul>
   </div>
 </div>
+-->

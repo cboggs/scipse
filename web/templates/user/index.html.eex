@@ -1,0 +1,14 @@
+<h1>Listing Users</h1>
+
+<table class="table">
+  <%= for user <- @users do %>
+    <tr>
+      <td><b><%= render "user.html", user: user %></b>
+      </td>
+      <td><%= link("View", to: user_path(@conn, :show, user.id)) %></td>
+      <td><%= link("Delete", to: user_path(@conn, :delete, user.id), method: :delete) %></td>
+
+    </tr>
+  <% end %>
+  <%= link("New user", to: user_path(@conn, :new)) %>
+</table>

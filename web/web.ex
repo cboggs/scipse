@@ -36,6 +36,7 @@ defmodule Scipse.Web do
 
       import Scipse.Router.Helpers
       import Scipse.Gettext
+      import Scipse.Auth, only: [auth_user: 2, superadmin_only: 2, user_is_superadmin: 1]
     end
   end
 
