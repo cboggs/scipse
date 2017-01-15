@@ -2,6 +2,7 @@ defmodule Scipse.Auth do
   import Plug.Conn
   import Phoenix.Controller
   alias Scipse.Router.Helpers, as: RouterHelpers
+  alias Scipse.User
 
   def init(opts) do
     Keyword.fetch!(opts, :repo)
@@ -15,10 +16,15 @@ defmodule Scipse.Auth do
   end
 
   def login(conn, user) do
-    conn
-    |> assign(:current_user, user)
-    |> put_session(:user_id, user.id)
-    |> configure_session(renew: true)
+    case conn.assigns.current_user do
+      nil ->
+        conn
+        |> assign(:current_user, user)
+        |> put_session(:user_id, user.id)
+        |> configure_session(renew: true)
+      %User{} ->
+        conn
+    end
   end
 
   def login_by_username_and_pass(conn, username, given_pass, opts) do

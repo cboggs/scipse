@@ -41,7 +41,7 @@ defmodule Scipse.UserController do
         conn
         |> Scipse.Auth.login(user)
         |> put_flash(:info, "#{user.name} created!")
-        |> redirect(to: user_path(conn, :index))
+        |> render("show.html", user: user)
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
