@@ -6,6 +6,8 @@ defmodule Scipse.UserController do
   require Logger
 
   plug :auth_user when action in [:index, :show, :delete]
+
+  # TODO: Stop mixing "normal" and "superadmin" user ops in one controller
   plug :superadmin_only when action in [:index, :show, :delete]
 
   def index(conn, _params) do
