@@ -21,6 +21,7 @@ defmodule Scipse.Router do
     resources "/users", UserController,         only: [:index, :show, :new, :create, :delete]
     resources "/documents", DocumentController, only: [:index, :show, :new, :create, :delete]
     resources "/sessions", SessionController,   only: [:create, :new, :delete]
+    get "/admin", AdminController, :index
   end
 
   # Other scopes may use custom stacks.
