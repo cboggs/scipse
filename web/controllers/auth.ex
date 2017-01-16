@@ -48,13 +48,14 @@ defmodule Scipse.Auth do
   end
 
   def auth_user(conn, _opts) do
-    if conn.assigns.current_user do
-      conn
-    else
-      conn
-      |> put_flash(:error, "You must be logged in to access that page.")
-      |> redirect(to: RouterHelpers.session_path(conn, :new))
-      |> halt()
+    case conn.assigns.current_user do
+      %User{} ->
+        conn
+      nil ->
+        conn
+        |> put_flash(:error, "You must be logged in to access that page.")
+        |> redirect(to: RouterHelpers.session_path(conn, :new))
+        |> halt()
     end
   end
 
