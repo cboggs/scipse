@@ -1,9 +1,8 @@
-defmodule Scipse.AdminController do
+defmodule Scipse.HomeController do
   use Scipse.Web, :controller
-  alias Scipse.User
-
+  plug :auth_user
+  
   def index(conn, _params) do
     render(conn, "index.html")
   end
-
 end

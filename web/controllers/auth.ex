@@ -3,6 +3,7 @@ defmodule Scipse.Auth do
   import Phoenix.Controller
   alias Scipse.Router.Helpers, as: RouterHelpers
   alias Scipse.User
+  require Logger
 
   def init(opts) do
     Keyword.fetch!(opts, :repo)
@@ -49,13 +50,13 @@ defmodule Scipse.Auth do
 
   def auth_user(conn, _opts) do
     case conn.assigns.current_user do
-      %User{} ->
-        conn
       nil ->
         conn
         |> put_flash(:error, "You must be logged in to access that page.")
         |> redirect(to: RouterHelpers.session_path(conn, :new))
         |> halt()
+      %User{} ->
+        conn
     end
   end
 
