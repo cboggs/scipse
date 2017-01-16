@@ -8,7 +8,7 @@ defmodule Scipse.UserController do
   plug :auth_user when action in [:index, :show, :delete]
 
   # TODO: Stop mixing "normal" and "superadmin" user ops in one controller
-  plug :superadmin_only when action in [:index, :show, :delete]
+  plug :superadmin_only when action in [:index, :delete]
 
   def index(conn, _params) do
     users = Repo.all(User)
