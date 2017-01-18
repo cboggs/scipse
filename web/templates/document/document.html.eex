@@ -1,0 +1,1 @@
+<b><%= @document.name %></b> (<%= @document.id %>)

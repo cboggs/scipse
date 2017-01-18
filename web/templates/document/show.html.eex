@@ -1,0 +1,2 @@
+<h1>Showing Document</h1>
+<%= render "document.html", document: @document %>

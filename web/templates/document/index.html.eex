@@ -1,0 +1,14 @@
+<h1>Listing Documents</h1>
+<table class="table">
+  <%= for document <- @documents do %>
+    <tr>
+      <td><b><%= render "document.html", document: document %></b>
+      </td>
+      <td><%= link("View", to: document_path(@conn, :show, document.id)) %></td>
+      <%= if Scipse.Auth.user_is_superadmin(@conn) do %>
+      <td><%= link("Delete", to: document_path(@conn, :delete, document.id), method: :delete) %></td>
+      <% end %>
+    </tr>
+  <% end %>
+  <%= link("New Document", to: document_path(@conn, :new)) %>
+</table>

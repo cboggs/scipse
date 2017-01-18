@@ -1,1 +1,10 @@
-<h1>Hi you admin person you!</h2>
+<h1><u>SciPSE Admin</u></h1>
+
+<table class="table">
+  <tr>
+    <td><b><%= link("Users", to: user_path(@conn, :index)) %></td>
+  </tr>
+  <tr>
+    <td><b><%= link("Documents", to: document_path(@conn, :index)) %></td>
+  </tr>
+</table>

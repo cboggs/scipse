@@ -1,5 +1,6 @@
 defmodule Scipse.Document do
   use Scipse.Web, :model
+  alias Scipse.Repo
 
   schema "documents" do
     field :name, :string
@@ -10,4 +11,16 @@ defmodule Scipse.Document do
     #has_many     :comments, Scipse.Comment
   end
 
+  def changeset(document, user, params \\ :empty) do
+    document
+    |> Repo.preload(:user)
+    |> cast(params, [:name])
+    |> unique_constraint(:name)
+    |> put_assoc(:user, user)
+  end
+
+  def delete_changeset(document, params \\ :empty) do
+    document
+    |> cast(params, [:name])
+  end
 end

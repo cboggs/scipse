@@ -68,11 +68,26 @@ defmodule Scipse.Auth do
     case user_is_superadmin(conn) do
       true  -> conn
       false ->
+        Logger.warn "Referer: #{inspect(get_req_header(conn, "referer"))}"
+        referer_path =
+          get_req_header(conn, "referer")
+          |> get_referer_path
+
         conn
-        |> put_flash(:error, "Sorry, you must be an admin to view that page.")
-        |> redirect(to: RouterHelpers.page_path(conn, :index))
+        |> put_flash(:error, "Sorry, you must be an admin to do that.")
+        |> redirect(to: referer_path)
         |> halt()
     end
+  end
+
+  defp get_referer_path([]), do: "/"
+  defp get_referer_path([url]) do
+    path =
+    url
+    |> String.split("/")
+    |> List.last()
+
+    "/" <> path
   end
 
 end

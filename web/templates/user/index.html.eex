@@ -6,9 +6,10 @@
       <td><b><%= render "user.html", user: user %></b>
       </td>
       <td><%= link("View", to: user_path(@conn, :show, user.id)) %></td>
+      <%= if Scipse.Auth.user_is_superadmin(@conn) do %>
       <td><%= link("Delete", to: user_path(@conn, :delete, user.id), method: :delete) %></td>
-
+      <% end %>
     </tr>
   <% end %>
-  <%= link("New user", to: user_path(@conn, :new)) %>
+  <%= link("New User", to: user_path(@conn, :new)) %>
 </table>
