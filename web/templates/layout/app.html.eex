@@ -26,7 +26,14 @@
             <li><%= link "Log in", to: session_path(@conn, :new) %></li>
           <% end %>
         </ol>
-        <span class="logo"><object type="image/svg+xml" data="<%= static_path(@conn, "/images/scipse_logo.svg") %>"></object></span>
+<!--
+        <span class="logo">
+          <object type="image/svg+xml" data="<%= static_path(@conn, "/images/scipse_logo.svg") %>"></object>
+        </span>
+-->
+        <div class="logo">
+          <object type="image/svg+xml" data="<%= static_path(@conn, "/images/scipse_logo.svg") %>"></object>
+        </div>
       </div>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
