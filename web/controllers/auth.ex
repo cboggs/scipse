@@ -28,6 +28,7 @@ defmodule Scipse.Auth do
     end
   end
 
+  #TODO: Make usernames case-insensitive
   def login_by_username_and_pass(conn, username, given_pass, opts) do
     import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
     repo = Keyword.fetch!(opts, :repo)
