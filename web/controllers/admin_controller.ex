@@ -6,4 +6,8 @@ defmodule Scipse.AdminController do
     render(conn, "index.html")
   end
 
+  def pdf(conn, _params) do
+    render(conn, "pdf.html")
+  end
+
 end
