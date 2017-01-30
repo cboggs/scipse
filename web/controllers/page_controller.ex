@@ -12,4 +12,12 @@ defmodule Scipse.PageController do
         end
     end
   end
+
+  def pdf(conn, _params) do
+    render(conn, "pdf.html")
+  end
+
+  def svg(conn, _params) do
+    render(conn, "svg.html")
+  end
 end
