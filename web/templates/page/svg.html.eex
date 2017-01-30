@@ -1,0 +1,64 @@
+<h3>Draw Somethin'</h3>
+<style>
+svg {
+    border: 1px solid grey;
+}
+rect {
+    stroke: steelblue;
+    stroke-width: 2px;
+    stroke-linecap: round;
+    fill: "blue";
+    fill-opacity: 0.0;
+}
+</style>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script>
+var line;
+var svg = d3.select("body").append("svg") 
+    .attr("width", 600)
+    .attr("height", 400)
+    .on("mousedown", mousedown)
+    .on("mouseup", mouseup);
+
+function mousedown() {
+  var m = d3.mouse(this);
+  rect = svg.append("rect")
+      .attr("x", m[0])
+      .attr("y", m[1])
+      .attr("start_x", m[0])
+      .attr("start_y", m[1])
+      .attr("width", 0)
+      .attr("height", 1)
+      .attr("rx", 10)
+      .attr("ry", 10);
+
+  svg.on("mousemove", mousemove);
+}
+
+function mousemove() {
+  var m = d3.mouse(this);
+  var start_x = rect.attr("start_x"),
+      start_y = rect.attr("start_y");
+
+  if (m[0] > start_x) {
+    rect.attr("width", m[0] - start_x);
+  }
+  if (m[1] > start_y) {
+    rect.attr("height", m[1] - start_y);
+  }
+  if (m[0] < start_x) {
+    rect.attr("x", m[0])
+        .attr("width", start_x - m[0]);
+  }
+  if (m[1] < start_y) {
+    rect.attr("y", m[1])
+        .attr("height", start_y - m[1]);
+  }
+}
+
+function mouseup() {
+    svg.on("mousemove", null);
+}
+
+</script>

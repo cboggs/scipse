@@ -30,12 +30,13 @@ defmodule Scipse.Router do
     resources "/home",      HomeController,     only: [:index]
     resources "/documents", DocumentController, only: [:index, :show, :new, :create]
     resources "/sessions",  SessionController,  only: [:create, :new, :delete]
+    get "/pdf", PageController, :pdf
+    get "/svg", PageController, :svg
   end
 
   scope "/admin", Scipse do
     pipe_through [:browser, :admin]
     get "/", AdminController, :index
-    get "/pdf", AdminController, :pdf
     resources "/users", UserController,         only: [:index, :show, :delete]
     resources "/documents", DocumentController, only: [:delete]
   end

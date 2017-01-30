@@ -1,7 +1,7 @@
 import MainView from './main';
 //import socket from '../socket.js';
 
-export default class AdminPdfView extends MainView {
+export default class PagePdfView extends MainView {
   mount() {
     super.mount();
     console.log("Entered AdminPdfView");
