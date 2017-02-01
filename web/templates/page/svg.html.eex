@@ -3,62 +3,107 @@
 svg {
     border: 1px solid grey;
 }
+.delete_button {
+  stroke: red;
+  stroke-width: 2px;
+  fill: red;
+  fill-opacity: 0.1;
+}
 rect {
     stroke: steelblue;
     stroke-width: 2px;
-    stroke-linecap: round;
-    fill: "blue";
+    fill: white;
     fill-opacity: 0.0;
 }
 </style>
+
 <script src="http://d3js.org/d3.v3.min.js"></script>
 
 <script>
-var line;
+var rect;
+var box_next_id = 0;
 var svg = d3.select("body").append("svg") 
     .attr("width", 600)
     .attr("height", 400)
-    .on("mousedown", mousedown)
-    .on("mouseup", mouseup);
+    .on("mousedown", start_box)
+    .on("mouseup", finish_box)
+    .on("contextmenu", function(d, i) { d3.event.preventDefault(); });
 
-function mousedown() {
-  var m = d3.mouse(this);
-  rect = svg.append("rect")
-      .attr("x", m[0])
-      .attr("y", m[1])
-      .attr("start_x", m[0])
-      .attr("start_y", m[1])
-      .attr("width", 0)
-      .attr("height", 1)
-      .attr("rx", 10)
-      .attr("ry", 10);
+function start_box() {
+  if (d3.event.button == 0) {
+    mouse = d3.mouse(this);
+    g = svg.append("g")
+          .attr("id", "box_" + box_next_id)
+          .on("mouseover", function() {
+            svg.on("mousedown", null);
+            d3.select(this)
+              .select(".delete_button")
+                .attr("opacity", 1.0);
+            })
+          .on("mouseout", function() {
+            svg.on("mousedown", start_box);
+            d3.select(this)
+              .select(".delete_button")
+                .attr("opacity", 0.0);
+            })
+    rect = g.append("rect")
+        .attr("x", mouse[0])
+        .attr("y", mouse[1])
+        .attr("start_x", mouse[0])
+        .attr("start_y", mouse[1])
+        .attr("width", 0)
+        .attr("height", 1)
+        .attr("rx", 10)
+        .attr("ry", 10);
 
-  svg.on("mousemove", mousemove);
+    box_next_id += 1;
+    svg.on("mousemove", adjust_box);
+  }
+} 
+
+function adjust_box() {
+  mouse = d3.mouse(this);
+  start_x = rect.attr("start_x");
+  start_y = rect.attr("start_y");
+
+  if (mouse[0] > start_x) {
+    rect.attr("width", mouse[0] - start_x);
+  }
+  if (mouse[1] > start_y) {
+    rect.attr("height", mouse[1] - start_y);
+  }
+  if (mouse[0] < start_x) {
+    rect.attr("x", mouse[0])
+        .attr("width", start_x - mouse[0]);
+  }
+  if (mouse[1] < start_y) {
+    rect.attr("y", mouse[1])
+        .attr("height", start_y - mouse[1]);
+  }
 }
 
-function mousemove() {
-  var m = d3.mouse(this);
-  var start_x = rect.attr("start_x"),
-      start_y = rect.attr("start_y");
-
-  if (m[0] > start_x) {
-    rect.attr("width", m[0] - start_x);
+function finish_box() {
+  if (rect.attr("width") <= 20 || rect.attr("height") <= 20) {
+    rect.remove();
   }
-  if (m[1] > start_y) {
-    rect.attr("height", m[1] - start_y);
+  else {
+    delete_button =
+      g.append("rect")
+        .attr("class", "delete_button")
+        .attr("x", +rect.attr("x") + +rect.attr("width") - 15)
+        .attr("y", +rect.attr("y") + 5)
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("rx", 5)
+        .attr("ry", 5)
+        .attr("opacity", 0.0);
+    delete_button.on("mouseup", function() {
+        box_id = d3.select(this.parentNode).attr("id");
+        d3.select("#" + box_id).remove();
+        svg.on("mousedown", start_box);
+      });
   }
-  if (m[0] < start_x) {
-    rect.attr("x", m[0])
-        .attr("width", start_x - m[0]);
-  }
-  if (m[1] < start_y) {
-    rect.attr("y", m[1])
-        .attr("height", start_y - m[1]);
-  }
-}
-
-function mouseup() {
-    svg.on("mousemove", null);
+  svg.on("mousemove", null);
 }
 
 </script>
