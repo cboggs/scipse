@@ -21,6 +21,8 @@ import "phoenix_html"
 // import socket from "./socket"
 
 import loadView from './views/loader';
+import * as d3 from 'd3';
+import * as PDFJS from 'pdfjs-dist';
 
 function handleDOMContentLoaded() {
   // Get the current view name
