@@ -15,7 +15,7 @@ svg {
 rect {
     stroke: #ff0080;
     stroke-width: 4px;
-    fill: #ff0080;
+    fill: steelblue;
     fill-opacity: 0.1;
 }
 .pdf-svg {
@@ -23,3 +23,5 @@ rect {
   cursor: default;
 }
 </style>
+
+<div id="pdf_path" data-pdf-path='vendor/test.pdf'></div>

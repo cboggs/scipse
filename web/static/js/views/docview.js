@@ -125,21 +125,22 @@ function start_box() {
 export default class PagePdfView extends MainView {
   mount() {
     super.mount();
+    const pdf_path = document.getElementById('pdf_path').dataset.pdfPath;
     let div = this.create_parent_div();
-    this.render_pdf(div);
+    this.render_pdf(div, pdf_path);
   }
 
   create_parent_div() {
     return d3.select("body").append("div").attr("id", "parent-div");
   }
 
-  render_pdf(div) {
+  render_pdf(div, pdf_path) {
     let parent_div_id = div.attr("id");
     let base_pdf_svg_id = "pdf-svg";
     let pdf_svg_num = 0;
 
     PDFJS.workerSrc = '/vendor/pdf.worker.min.js';
-    PDFJS.getDocument('/vendor/test.pdf').then(function (pdf) {
+    PDFJS.getDocument(pdf_path).then(function (pdf) {
       for (var pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
         pdf.getPage(pageNum).then(function (page) {
           var scale = 0.6;
