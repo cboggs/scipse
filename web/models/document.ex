@@ -4,8 +4,8 @@ defmodule Scipse.Document do
 
   schema "documents" do
     field :name, :string
+    field :file, :string
     belongs_to :user, Scipse.User
-    #has_one :file, Scipse.File
     #many_to_many :authors, Scipse.Author, join_through: Scipse.DocumentAuthor
     #many_to_many :categories, Scipse.Category, join_through: Scipse.DocumentCategory
     #many_to_many :annotations, Scipse.Annotation, join_through: Scipse.DocumentAnnotation
@@ -15,9 +15,9 @@ defmodule Scipse.Document do
   def changeset(document, user, params \\ :invalid) do
     document
     |> Repo.preload(:user)
-    |> cast(params, ~w(name))
+    |> cast(params, ~w(name file))
     |> validate_required(:name)
-    |> validate_length(:name, min: 1, max: 255)
+    |> validate_required(:file)
     |> unique_constraint(:name)
     |> put_assoc(:user, user)
   end

@@ -26,8 +26,13 @@ defmodule Scipse.DocumentController do
   end
 
   def create(conn, %{"document" => document_params}) do
-    file_path = document_params["file"].path
+    file_path = case document_params["file"] do
+      nil -> ""
+      file -> file.path
+    end
+
     Logger.warn "file: #{inspect(file_path)}"
+
     case File.exists?(file_path) do
       true  ->
         file_name = Path.basename(file_path, "")
