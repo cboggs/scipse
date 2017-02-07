@@ -14,7 +14,7 @@ config :scipse, Scipse.Endpoint,
   watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
                     cd: Path.expand("../", __DIR__)]],
   pdf_store_path: "priv/static/pdf",
-  pdf_url_path: "/static/pdf"
+  pdf_url_path: "/pdf"
 
 
 # Watch static and templates for browser reloading.
