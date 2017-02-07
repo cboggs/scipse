@@ -24,4 +24,4 @@ rect {
 }
 </style>
 
-<div id="pdf_path" data-pdf-path='vendor/test.pdf'></div>
+<div id="pdf_path" data-pdf-path='<%= Application.get_env(:scipse, Scipse.Endpoint)[:pdf_url_path] %>/test.pdf'>

@@ -25,3 +25,5 @@ erl_crash.dump
 
 /tags*
 **/.*.swp
+!/priv/static/pdf/test.pdf
+/priv/static/pdf/*.pdf
