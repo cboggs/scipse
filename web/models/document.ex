@@ -12,15 +12,17 @@ defmodule Scipse.Document do
     #has_many     :comments, Scipse.Comment
   end
 
-  def changeset(document, user, params \\ :empty) do
+  def changeset(document, user, params \\ :invalid) do
     document
     |> Repo.preload(:user)
-    |> cast(params, [:name])
+    |> cast(params, ~w(name))
+    |> validate_required(:name)
+    |> validate_length(:name, min: 1, max: 255)
     |> unique_constraint(:name)
     |> put_assoc(:user, user)
   end
 
-  def delete_changeset(document, params \\ :empty) do
+  def delete_changeset(document, params \\ :invalid) do
     document
     |> cast(params, [:name])
   end

@@ -37,10 +37,13 @@ defmodule Scipse.DocumentController do
 
     user = conn.assigns.current_user
     changeset = Document.changeset(%Document{}, user, document_params)
+
     case Repo.insert(changeset) do
       {:ok, document} ->
         conn
         |> redirect(to: document_path(conn, :index))
+      {:error, changeset} ->
+        render(conn, "new.html", changeset: changeset)
     end
   end
 
@@ -49,7 +52,7 @@ defmodule Scipse.DocumentController do
     changeset = Changeset.change(document)
     case Repo.delete(changeset) do
       {:ok, _document} ->
-        Logger.info "User deleted"
+        Logger.info "Document deleted"
         conn
         |> redirect(to: "/documents")
         |> halt()
