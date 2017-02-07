@@ -8,6 +8,10 @@ svg {
   fill: red;
   fill-opacity: 0.1;
 }
+#parent-div {
+  display: block;
+  margin: auto;
+}
 rect {
     stroke: #ff0080;
     stroke-width: 4px;

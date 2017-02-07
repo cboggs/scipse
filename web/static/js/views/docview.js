@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 function start_box() {
     if (d3.event.button == 0) {
       this.adjusted = false;
+      this.finish_margin_px = 3;
       let mouse = d3.mouse(this);
       let mouse_x = mouse[0];
       let mouse_y = mouse[1];
@@ -26,29 +27,46 @@ function start_box() {
           .attr("height", 1)
           .attr("rx", 10)
           .attr("ry", 10);
-
       svg.on("mousemove", adjust_box);
     }
   }
 
   function adjust_box() {
+    let svg = d3.select(this);
+    let svg_canvas_width = parseInt(svg.attr('width')) - this.finish_margin_px;
+    let svg_canvas_height = parseInt(svg.attr('height')) - this.finish_margin_px;
     let mouse = d3.mouse(this);
-    let mouse_x = mouse[0]; let mouse_y = mouse[1];
+    let mouse_x = mouse[0];
+    let mouse_y = mouse[1];
 
-    if (mouse_x > this.start_x) {
+    if (mouse_x >= this.start_x && mouse_x <= svg_canvas_width) {
       this.rect.attr("width", mouse_x - this.start_x);
     }
-    if (mouse_y > this.start_y) {
-      this.rect.attr("height", mouse_y - this.start_y);
-    }
-    if (mouse_x < this.start_x) {
+    else if (mouse_x < this.start_x && mouse_x >= this.finish_margin_px) {
       this.rect.attr("x", mouse_x)
           .attr("width", this.start_x - mouse_x);
     }
-    if (mouse_y < this.start_y) {
+    else {
+      console.log("FIRED THE X ELSE");
+      console.log('start_x: ' + this.start_x + ' --- mouse_x: ' + mouse_x);
+      console.log('svg_canvas_height: ' + svg_canvas_width);
+      dispatch_mouseup_to_svg(svg.attr('id'));
+    }
+
+    if (mouse_y >= this.start_y && mouse_y <= svg_canvas_height) {
+      this.rect.attr("height", mouse_y - this.start_y);
+    }
+    else if (mouse_y < this.start_y && mouse_y >= this.finish_margin_px) {
       this.rect.attr("y", mouse_y)
           .attr("height", this.start_y - mouse_y);
     }
+    else {
+      console.log("FIRED THE Y ELSE");
+      console.log('start_y: ' + this.start_y + ' --- mouse_y: ' + mouse_y);
+      console.log('svg_canvas_height: ' + svg_canvas_height);
+      dispatch_mouseup_to_svg(svg.attr('id'));
+    }
+
     this.adjusted = true;
   }
 
@@ -88,6 +106,12 @@ function start_box() {
     }
   }
 
+  function dispatch_mouseup_to_svg(svg_id) {
+    var evt = document.createEvent("MouseEvents");
+    evt.initEvent("mouseup", true, true);
+    document.getElementById(svg_id).dispatchEvent(evt);
+  }
+
   function box_mouseover() {
     d3.select("#" + this.parentNode.id)
         .on("mousedown", null);
@@ -121,34 +145,36 @@ export default class PagePdfView extends MainView {
 
     PDFJS.workerSrc = '/vendor/pdf.worker.min.js';
     PDFJS.getDocument('/vendor/test.pdf').then(function (pdf) {
-      pdf.getPage(1).then(function (page) {
-        var scale = 1.3;
-        var viewport = page.getViewport(scale);
+      for (var pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        pdf.getPage(pageNum).then(function (page) {
+          var scale = 0.6;
+          var viewport = page.getViewport(scale);
 
-        var container = document.getElementById(parent_div_id);
+          var container = document.getElementById(parent_div_id);
 
-        container.style.width = viewport.width + "px";
-        container.style.height = viewport.height + "px";
+          container.style.width = viewport.width + "px";
+          container.style.height = viewport.height + "px";
 
-        page.getOperatorList()
-          .then(function (opList) {
-            var svgGfx = new PDFJS.SVGGraphics(page.commonObjs, page.objs);
-            return svgGfx.getSVG(opList, viewport);
-          })
-          .then(function (svg) {
-            svg.setAttribute("id", pdf_svg_id);
-            container.appendChild(svg);
-            d3.select("#" + pdf_svg_id)
-              .on("mousedown", start_box)
-              .on("mouseup", finish_box)
-              .on("contextmenu", function(d, i) { d3.event.preventDefault(); });
-
-            d3.select("#" + pdf_svg_id)
-              .selectAll("*")
-                .attr("class", "pdf-svg")
+          page.getOperatorList()
+            .then(function (opList) {
+              var svgGfx = new PDFJS.SVGGraphics(page.commonObjs, page.objs);
+              return svgGfx.getSVG(opList, viewport);
+            })
+            .then(function (svg) {
+              svg.setAttribute("id", pdf_svg_id);
+              container.appendChild(svg);
+              d3.selectAll("#" + pdf_svg_id)
+                .on("mousedown", start_box)
+                .on("mouseup", finish_box)
                 .on("contextmenu", function(d, i) { d3.event.preventDefault(); });
-          });
-      });
+
+              d3.selectAll("#" + pdf_svg_id)
+                .selectAll("*")
+                  .attr("class", "pdf-svg")
+                  .on("contextmenu", function(d, i) { d3.event.preventDefault(); });
+            });
+        });
+      }
     });
   }
 }
