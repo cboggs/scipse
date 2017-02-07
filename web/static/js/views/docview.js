@@ -122,7 +122,7 @@ export default class PagePdfView extends MainView {
     PDFJS.workerSrc = '/vendor/pdf.worker.min.js';
     PDFJS.getDocument('/vendor/test.pdf').then(function (pdf) {
       pdf.getPage(1).then(function (page) {
-        var scale = 0.85;
+        var scale = 1.3;
         var viewport = page.getViewport(scale);
 
         var container = document.getElementById(parent_div_id);
