@@ -47,9 +47,6 @@ function start_box() {
           .attr("width", this.start_x - mouse_x);
     }
     else {
-      console.log("FIRED THE X ELSE");
-      console.log('start_x: ' + this.start_x + ' --- mouse_x: ' + mouse_x);
-      console.log('svg_canvas_height: ' + svg_canvas_width);
       dispatch_mouseup_to_svg(svg.attr('id'));
     }
 
@@ -61,9 +58,6 @@ function start_box() {
           .attr("height", this.start_y - mouse_y);
     }
     else {
-      console.log("FIRED THE Y ELSE");
-      console.log('start_y: ' + this.start_y + ' --- mouse_y: ' + mouse_y);
-      console.log('svg_canvas_height: ' + svg_canvas_height);
       dispatch_mouseup_to_svg(svg.attr('id'));
     }
 
@@ -141,7 +135,8 @@ export default class PagePdfView extends MainView {
 
   render_pdf(div) {
     let parent_div_id = div.attr("id");
-    let pdf_svg_id = "pdf-svg";
+    let base_pdf_svg_id = "pdf-svg";
+    let pdf_svg_num = 0;
 
     PDFJS.workerSrc = '/vendor/pdf.worker.min.js';
     PDFJS.getDocument('/vendor/test.pdf').then(function (pdf) {
@@ -161,14 +156,16 @@ export default class PagePdfView extends MainView {
               return svgGfx.getSVG(opList, viewport);
             })
             .then(function (svg) {
-              svg.setAttribute("id", pdf_svg_id);
+              let svg_id = base_pdf_svg_id + '_' + pdf_svg_num;
+              pdf_svg_num++;
+              svg.setAttribute("id", svg_id);
               container.appendChild(svg);
-              d3.selectAll("#" + pdf_svg_id)
+              d3.selectAll("#" + svg_id)
                 .on("mousedown", start_box)
                 .on("mouseup", finish_box)
                 .on("contextmenu", function(d, i) { d3.event.preventDefault(); });
 
-              d3.selectAll("#" + pdf_svg_id)
+              d3.selectAll("#" + svg_id)
                 .selectAll("*")
                   .attr("class", "pdf-svg")
                   .on("contextmenu", function(d, i) { d3.event.preventDefault(); });
