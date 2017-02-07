@@ -1,11 +1,9 @@
 import MainView from './main';
-//import DocShowView from './docview';
-import PagePdfView from './docview';
+import DocumentShowView from './docview';
 
 // Collection of specific view modules
 const views = {
-  //DocShowView,
-  PagePdfView,
+  DocumentShowView,
 };
 
 export default function loadView(viewName) {

@@ -122,7 +122,7 @@ function start_box() {
       .attr("opacity", 0.0);
   }
 
-export default class PagePdfView extends MainView {
+export default class DocumentShowView extends MainView {
   mount() {
     super.mount();
     const pdf_path = document.getElementById('pdf_path').dataset.pdfPath;
@@ -143,7 +143,7 @@ export default class PagePdfView extends MainView {
     PDFJS.getDocument(pdf_path).then(function (pdf) {
       for (var pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
         pdf.getPage(pageNum).then(function (page) {
-          var scale = 0.6;
+          var scale = 1.0;
           var viewport = page.getViewport(scale);
 
           var container = document.getElementById(parent_div_id);

@@ -22,6 +22,11 @@ rect {
   user-select: none;
   cursor: default;
 }
+#saveBtn {
+  position: fixed;
+  top: 95%;
+  left: 92%;
+}
 </style>
-
+<%= submit "Save", class: "btn btn-primary", id: "saveBtn" %>
 <div id="pdf_path" data-pdf-path='<%= Application.get_env(:scipse, Scipse.Endpoint)[:pdf_url_path] %>/test.pdf'>
