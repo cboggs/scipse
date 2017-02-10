@@ -1,2 +1,35 @@
-<h1>Showing Document</h1>
-<%= render "document.html", document: @document %>
+<h1><%= render "document.html", document: @document %></h1>
+
+<style>
+svg {
+    border: 1px solid grey;
+}
+.delete_button {
+  stroke: red;
+  stroke-width: 2px;
+  fill: red;
+  fill-opacity: 0.1;
+}
+#parent-div {
+  display: block;
+  margin: auto;
+}
+rect {
+    stroke: #ff0080;
+    stroke-width: 4px;
+    fill: steelblue;
+    fill-opacity: 0.1;
+}
+.pdf-svg {
+  user-select: none;
+  cursor: default;
+}
+#saveBtn {
+  position: fixed;
+  top: 95%;
+  left: 92%;
+}
+</style>
+
+<%= submit "Save", class: "btn btn-primary", id: "saveBtn" %>
+<div id="pdf_path" data-pdf-path='<%= @document.file_path %>'>
