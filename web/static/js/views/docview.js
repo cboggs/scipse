@@ -78,7 +78,7 @@ function start_box() {
       else {
         let delete_button =
           this.g.append("rect")
-            .attr("class", "delete_button")
+            .attr("class", "annotationDeleteButton")
             .attr("x", +this.rect.attr("x") + +this.rect.attr("width") - 15)
             .attr("y", +this.rect.attr("y") + 5)
             .attr("width", 10)
@@ -110,7 +110,7 @@ function start_box() {
     d3.select("#" + this.parentNode.id)
         .on("mousedown", null);
     d3.select(this)
-      .select(".delete_button")
+      .select(".annotationDeleteButton")
       .attr("opacity", 1.0);
   }
 
@@ -118,7 +118,7 @@ function start_box() {
     d3.select("#" + this.parentNode.id)
         .on("mousedown", start_box);
     d3.select(this)
-      .select(".delete_button")
+      .select(".annotationDeleteButton")
       .attr("opacity", 0.0);
   }
 
@@ -131,7 +131,7 @@ export default class DocumentShowView extends MainView {
   }
 
   create_parent_div() {
-    return d3.select("body").append("div").attr("id", "parent-div");
+    return d3.select("body").append("div").attr("id", "pdfParentDiv");
   }
 
   render_pdf(div, pdf_path) {
@@ -162,14 +162,17 @@ export default class DocumentShowView extends MainView {
               svg.setAttribute("id", svg_id);
               container.appendChild(svg);
               d3.selectAll("#" + svg_id)
+                .attr("class", "pdfPageParentSvg")
                 .on("mousedown", start_box)
                 .on("mouseup", finish_box)
                 .on("contextmenu", function(d, i) { d3.event.preventDefault(); });
 
               d3.selectAll("#" + svg_id)
                 .selectAll("*")
-                  .attr("class", "pdf-svg")
+                  .attr("class", "pdfPageSvg")
                   .on("contextmenu", function(d, i) { d3.event.preventDefault(); });
+
+              console.log("Rendered page " + pdf_svg_num);
             });
         });
       }

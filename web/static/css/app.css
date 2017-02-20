@@ -1,5 +1,5 @@
 /* This file is for your main application css. */
-.inputfile {
+.inputFile {
     width: 0.1px;
     height: 0.1px;
     opacity: 0;
@@ -7,8 +7,7 @@
     position: absolute;
     z-index: -1;
 }
-
-.inputfile + label {
+.inputFile + label {
     max-width: 80%;
     font-size: 1.25rem;
     /* 20px */
@@ -21,8 +20,7 @@
     padding: 0.625rem 1.25rem;
     /* 10px 20px */
 }
-
-.inputfile + label svg {
+.inputFile + label svg {
     width: 1em;
     height: 1em;
     vertical-align: middle;
@@ -32,14 +30,45 @@
     margin-right: 0.25em;
     /* 4px */
 }
-
-.inputfile + label {
+.inputFile + label {
     color: #d3394c;
     border: 2px solid currentColor;
 }
-
-.inputfile:focus + label,
-.inputfile.has-focus + label,
-.inputfile + label:hover {
+.inputFile:focus + label,
+.inputFile.has-focus + label,
+.inputFile + label:hover {
     color: #722040;
+}
+.annotationDeleteButton {
+  stroke: red;
+  stroke-width: 2px;
+  fill: red;
+  fill-opacity: 0.1;
+}
+#pdfParentDiv {
+  display: block;
+  margin: auto;
+}
+rect {
+    stroke: #ff0080;
+    stroke-width: 4px;
+    fill: steelblue;
+    fill-opacity: 0.1;
+}
+.pdfPageParentSvg {
+  border: 1px solid grey;
+}
+.pdfPageSvg {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+#annotationSaveBtn {
+  position: fixed;
+  top: 95%;
+  left: 92%;
 }
