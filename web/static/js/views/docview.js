@@ -78,7 +78,7 @@ function start_box() {
       else {
         let delete_button =
           this.g.append("rect")
-            .attr("class", "delete_button")
+            .attr("class", "annotationDeleteButton")
             .attr("x", +this.rect.attr("x") + +this.rect.attr("width") - 15)
             .attr("y", +this.rect.attr("y") + 5)
             .attr("width", 10)
@@ -110,7 +110,7 @@ function start_box() {
     d3.select("#" + this.parentNode.id)
         .on("mousedown", null);
     d3.select(this)
-      .select(".delete_button")
+      .select(".annotationDeleteButton")
       .attr("opacity", 1.0);
   }
 
@@ -118,7 +118,7 @@ function start_box() {
     d3.select("#" + this.parentNode.id)
         .on("mousedown", start_box);
     d3.select(this)
-      .select(".delete_button")
+      .select(".annotationDeleteButton")
       .attr("opacity", 0.0);
   }
 
@@ -126,16 +126,12 @@ export default class DocumentShowView extends MainView {
   mount() {
     super.mount();
     const pdf_path = document.getElementById('pdf_path').dataset.pdfPath;
-    let div = this.create_parent_div();
+    const div = document.getElementById('pdfParentDiv');
     this.render_pdf(div, pdf_path);
   }
 
-  create_parent_div() {
-    return d3.select("body").append("div").attr("id", "parent-div");
-  }
-
   render_pdf(div, pdf_path) {
-    let parent_div_id = div.attr("id");
+    let parent_div_id = "pdfParentDiv";
     let base_pdf_svg_id = "pdf-svg";
     let pdf_svg_num = 0;
 
@@ -149,7 +145,7 @@ export default class DocumentShowView extends MainView {
           var container = document.getElementById(parent_div_id);
 
           container.style.width = viewport.width + "px";
-          container.style.height = viewport.height + "px";
+          container.style.height = ((viewport.height * pdf.numPages) + 25) + "px";
 
           page.getOperatorList()
             .then(function (opList) {
@@ -162,14 +158,17 @@ export default class DocumentShowView extends MainView {
               svg.setAttribute("id", svg_id);
               container.appendChild(svg);
               d3.selectAll("#" + svg_id)
+                .attr("class", "pdfPageParentSvg")
                 .on("mousedown", start_box)
                 .on("mouseup", finish_box)
                 .on("contextmenu", function(d, i) { d3.event.preventDefault(); });
 
               d3.selectAll("#" + svg_id)
                 .selectAll("*")
-                  .attr("class", "pdf-svg")
+                  .attr("class", "pdfPageSvg")
                   .on("contextmenu", function(d, i) { d3.event.preventDefault(); });
+
+              console.log("Rendered page " + pdf_svg_num);
             });
         });
       }
