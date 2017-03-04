@@ -23,7 +23,7 @@
 <% end %>
 
 <script>
-var inputs = document.querySelectorAll('.inputfile');
+var inputs = document.querySelectorAll('.inputFile');
 Array.prototype.forEach.call( inputs, function( input )
 {
   var label  = input.nextElementSibling,

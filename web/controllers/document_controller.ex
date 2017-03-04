@@ -1,7 +1,7 @@
 defmodule Scipse.DocumentController do
   use Scipse.Web, :controller
   alias Scipse.Document
-  alias Scipse.User
+  alias Scipse.PDFUtil
   alias Ecto.Changeset
   require Logger
 
@@ -27,40 +27,49 @@ defmodule Scipse.DocumentController do
   end
 
   def create(conn, %{"document" => document_params}) do
-    {param_file_path, param_file_name} = case document_params["file"] do
-      nil -> {"", ""} 
-      file -> {file.path, file.filename}
+    incoming_file_path = case document_params["file"] do
+      nil -> ""
+      file -> file.path
     end
 
-    Logger.warn "file: #{inspect(param_file_path)}"
+    # Do some work up front to determine if the PDF is still around and
+    #  where we should put it
+    static_asset_url_path = Application.get_env(:scipse, Scipse.Endpoint)[:pdf_url_path]
+    store_file_name = Path.basename(incoming_file_path)
+    store_file_path = Path.join(["priv", "static",
+                           static_asset_url_path, store_file_name])
 
-    store_file_path = case File.exists?(param_file_path) do
+    url_file_path = case File.exists?(incoming_file_path) do
       true  ->
-        url_path = Application.get_env(:scipse, Scipse.Endpoint)[:pdf_url_path]
-        store_file_name = Path.basename(param_file_path)
-        dest_path = Path.join(["priv", "static",
-                               url_path, store_file_name])
-        File.cp!(param_file_path, dest_path)
-        Path.join(url_path, store_file_name)
-      false -> nil
+        Path.join(static_asset_url_path, store_file_name)
+      false ->
+        Logger.error "Failed to process document #{inspect(document_params)}"
+        conn
+        |> put_flash(:error, "Error processing document.")
+        |> redirect(to: document_path(conn, :new))
+        |> halt()
     end
-
-    changeset_params = %{name: document_params["name"],
-                         file_path: store_file_path,
-                         file_name: document_params["file"].filename}
-
-    Logger.warn("CHANGESET_PARAMS: #{inspect(changeset_params)}")
 
     user = conn.assigns.current_user
+    pdf_page_count = PDFUtil.get_page_count(incoming_file_path)
+    changeset_params = %{name: document_params["name"],
+                         file_path: url_file_path,
+                         file_name: document_params["file"].filename,
+                         page_count: pdf_page_count}
     changeset = Document.changeset(%Document{}, user, changeset_params)
 
     case Repo.insert(changeset) do
-      {:ok, document} ->
+      {:ok, _document} ->
+        # Stick the PDF in a non-transient location
+        File.cp!(incoming_file_path, store_file_path)
+
         conn
+        |> put_flash(:info, "Document successfully submitted!")
         |> redirect(to: document_path(conn, :index))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+
   end
 
   def delete(conn, %{"id" => document_id}) do

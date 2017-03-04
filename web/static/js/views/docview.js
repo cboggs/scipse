@@ -126,16 +126,12 @@ export default class DocumentShowView extends MainView {
   mount() {
     super.mount();
     const pdf_path = document.getElementById('pdf_path').dataset.pdfPath;
-    let div = this.create_parent_div();
+    const div = document.getElementById('pdfParentDiv');
     this.render_pdf(div, pdf_path);
   }
 
-  create_parent_div() {
-    return d3.select("body").append("div").attr("id", "pdfParentDiv");
-  }
-
   render_pdf(div, pdf_path) {
-    let parent_div_id = div.attr("id");
+    let parent_div_id = "pdfParentDiv";
     let base_pdf_svg_id = "pdf-svg";
     let pdf_svg_num = 0;
 
@@ -149,7 +145,7 @@ export default class DocumentShowView extends MainView {
           var container = document.getElementById(parent_div_id);
 
           container.style.width = viewport.width + "px";
-          container.style.height = viewport.height + "px";
+          container.style.height = ((viewport.height * pdf.numPages) + 25) + "px";
 
           page.getOperatorList()
             .then(function (opList) {

@@ -1,5 +1,5 @@
 <h1><%= render "document.html", document: @document %></h1>
-
-
 <%= submit "Save", class: "btn btn-primary", id: "annotationSaveBtn" %>
-<div id="pdf_path" data-pdf-path='<%= @document.file_path %>'>
+<div id="pdf_path" data-pdf-path='<%= @document.file_path %>'></div>
+<div id="pdfParentDiv"></div>
+<div id="pdfNavLinks">FOOBAR</div>
