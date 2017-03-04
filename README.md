@@ -1,5 +1,13 @@
 # Scipse
 
+TODO:
+[ ] Add pagination to document view page
+[ ] Add nav links for general site navigation
+[ ] Add ability to either view a doc or edit it
+[ ] Add per-page DB records to track annotations
+[ ] "View" mode for a doc should show small annotation indicators that can be clicked to expand
+
+
 To start your Phoenix app:
 
   * Install dependencies with `mix deps.get`
